@@ -1,3 +1,3 @@
 # Webbie2
-"second version of web opening aplication.\n"
+<h1 align="center">second version of web opening aplication.</h1>
 hello
