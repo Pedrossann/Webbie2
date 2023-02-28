@@ -84,6 +84,10 @@ class App(ctk.CTk):
         else:
             self.add_window.focus()
 
+    def app_update(self):
+        if self.add_window:
+            self.add_window.focus()
+
 
 class AddButton(ctk.CTkButton):
     def __init__(self, master, window):
@@ -216,7 +220,10 @@ class Click_Button(ctk.CTkButton):
 
 def main():
     app = App()
-    app.mainloop()
+    while True:
+        app.app_update()
+        print("hi")
+        app.update()
 
 
 if __name__ == "__main__":
