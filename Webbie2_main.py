@@ -20,6 +20,7 @@ class App(ctk.CTk):
         )
 
         self.add_window = None
+        self.remove_window = None
         with open("last_opened.csv") as file:
             lines = csv.reader(file)
             for line in lines:
@@ -45,7 +46,7 @@ class App(ctk.CTk):
         )
 
         add_button = AddButton(frame_menu_box, window=self)
-        remove_button = RemoveButton(frame_menu_box)
+        remove_button = RemoveButton(frame_menu_box, window=self)
 
         for file in files_list:
             self.openbutton.append(
@@ -77,16 +78,32 @@ class App(ctk.CTk):
             line = csv.writer(file, lineterminator="")
             line.writerow([ctk.get_appearance_mode(), self.opened.rstrip(".csv")])
 
-    def open_window(self):
+    def open_add_window(self):
         if self.add_window == None:
             self.add_window = AddWindow(self)
             self.add_window.focus()
         else:
             self.add_window.focus()
 
+    def open_remove_window(self):
+        if self.add_window == None:
+            self.add_window = RemoveWindow(self)
+            self.add_window.focus()
+        else:
+            self.add_window.focus()
+
     def app_update(self):
         if self.add_window:
-            self.add_window.focus()
+            try:
+                self.add_window.focus()
+            except:
+                self.add_window = None
+
+        if self.remove_window:
+            try:
+                self.remove_window.focus()
+            except:
+                self.remove_window = None
 
 
 class AddButton(ctk.CTkButton):
@@ -98,7 +115,7 @@ class AddButton(ctk.CTkButton):
             fg_color=("#ACD400", "#FE8A00"),
             hover_color=("#BAE500", "#FE6C00"),
             text_color="black",
-            command=lambda self=self: window.open_window(),
+            command=lambda self=self: window.open_add_window(),
         )
 
         self.place(x=120, y=5)
@@ -111,8 +128,15 @@ class AddWindow(ctk.CTkToplevel):
         label.pack()
 
 
-class RemoveButton(ctk.CTkButton):
+class RemoveWindow(ctk.CTkToplevel):
     def __init__(self, master):
+        super().__init__(master)
+        label = ctk.CTkLabel(self, text="Remove Window")
+        label.pack()
+
+
+class RemoveButton(ctk.CTkButton):
+    def __init__(self, master, window):
         super().__init__(
             master=master,
             text="Remove",
@@ -120,6 +144,7 @@ class RemoveButton(ctk.CTkButton):
             fg_color=("#ACD400", "#FE8A00"),
             hover_color=("#BAE500", "#FE6C00"),
             text_color="black",
+            command=lambda self=self: window.open_remove_window(),
         )
 
         self.place(x=180, y=5)
