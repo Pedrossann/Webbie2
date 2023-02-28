@@ -222,7 +222,6 @@ def main():
     app = App()
     while True:
         app.app_update()
-        print("hi")
         app.update()
 
 
