@@ -19,6 +19,7 @@ class App(ctk.CTk):
             Image.open("BuildedImages/background.png"), size=(1920, 1080)
         )
 
+        self.add_window = None
         with open("last_opened.csv") as file:
             lines = csv.reader(file)
             for line in lines:
@@ -43,7 +44,7 @@ class App(ctk.CTk):
             x=15, y=5,
         )
 
-        add_button = AddButton(frame_menu_box)
+        add_button = AddButton(frame_menu_box, window=self)
         remove_button = RemoveButton(frame_menu_box)
 
         for file in files_list:
@@ -76,9 +77,16 @@ class App(ctk.CTk):
             line = csv.writer(file, lineterminator="")
             line.writerow([ctk.get_appearance_mode(), self.opened.rstrip(".csv")])
 
+    def open_window(self):
+        if self.add_window == None:
+            self.add_window = AddWindow(self)
+            self.add_window.focus()
+        else:
+            self.add_window.focus()
+
 
 class AddButton(ctk.CTkButton):
-    def __init__(self, master):
+    def __init__(self, master, window):
         super().__init__(
             master=master,
             text="Add",
@@ -86,9 +94,17 @@ class AddButton(ctk.CTkButton):
             fg_color=("#ACD400", "#FE8A00"),
             hover_color=("#BAE500", "#FE6C00"),
             text_color="black",
+            command=lambda self=self: window.open_window(),
         )
 
         self.place(x=120, y=5)
+
+
+class AddWindow(ctk.CTkToplevel):
+    def __init__(self, master):
+        super().__init__(master)
+        label = ctk.CTkLabel(self, text="Add Window")
+        label.pack()
 
 
 class RemoveButton(ctk.CTkButton):
