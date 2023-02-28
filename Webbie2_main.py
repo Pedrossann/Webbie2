@@ -31,10 +31,20 @@ class App(ctk.CTk):
         background = ctk.CTkLabel(self, image=bg_image, text="")
         background.place(relx=0.5, x=-(self.winfo_screenwidth() / 2))
 
-        switch_button = ctk.CTkSwitch(
-            self, text="Mode", command=lambda self=self: self.mode_switch()
+        frame_menu_box = ctk.CTkFrame(master=self, height=40, width=500)
+        frame_menu_box.place(x=15, y=5)
+
+        switch_mode_button = ctk.CTkSwitch(
+            master=frame_menu_box,
+            text="Mode",
+            command=lambda self=self: self.mode_switch(),
         )
-        switch_button.place(x=0, y=0)
+        switch_mode_button.place(
+            x=15, y=5,
+        )
+
+        add_button = AddButton(frame_menu_box)
+        remove_button = RemoveButton(frame_menu_box)
 
         for file in files_list:
             self.openbutton.append(
@@ -65,6 +75,34 @@ class App(ctk.CTk):
         with open("last_opened.csv", "w") as file:
             line = csv.writer(file, lineterminator="")
             line.writerow([ctk.get_appearance_mode(), self.opened.rstrip(".csv")])
+
+
+class AddButton(ctk.CTkButton):
+    def __init__(self, master):
+        super().__init__(
+            master=master,
+            text="Add",
+            width=20,
+            fg_color=("#ACD400", "#FE8A00"),
+            hover_color=("#BAE500", "#FE6C00"),
+            text_color="black",
+        )
+
+        self.place(x=120, y=5)
+
+
+class RemoveButton(ctk.CTkButton):
+    def __init__(self, master):
+        super().__init__(
+            master=master,
+            text="Remove",
+            width=20,
+            fg_color=("#ACD400", "#FE8A00"),
+            hover_color=("#BAE500", "#FE6C00"),
+            text_color="black",
+        )
+
+        self.place(x=180, y=5)
 
 
 # Button for opening frame ___________________________________
