@@ -29,7 +29,7 @@ class App(ctk.CTk):
                 opened_frame = line[1]
 
         background = ctk.CTkLabel(self, image=bg_image, text="")
-        background.place(relx=0.5, x=-770)  # add center of the window
+        background.place(relx=0.5, x=-(self.winfo_screenwidth() / 2))
 
         switch_button = ctk.CTkSwitch(
             self, text="Mode", command=lambda self=self: self.mode_switch()
