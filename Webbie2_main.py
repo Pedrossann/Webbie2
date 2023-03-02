@@ -124,8 +124,26 @@ class AddButton(ctk.CTkButton):
 class AddWindow(ctk.CTkToplevel):
     def __init__(self, master):
         super().__init__(master)
-        label = ctk.CTkLabel(self, text="Add Window")
-        label.pack()
+        self.title("Add Webbie2")
+        self.geometry("500x400+600+300")
+
+        image_button = ctk.CTkButton(self, width=160, height=250)
+        image_button.grid(row=0, column=0, rowspan=3, padx=20, pady=20)
+
+        name_label = ctk.CTkLabel(self, text="Add Window")
+        name_label.grid(row=0, column=1, padx=20, pady=20)
+
+        name_entry = ctk.CTkEntry(self, placeholder_text="Webbie2", state="normal")
+        name_entry.grid(row=0, column=2, padx=20, pady=20)
+
+        web_label = ctk.CTkLabel(self, text="Web link")
+        web_label.grid(row=1, column=1, padx=20, pady=20)
+
+        web_entry = ctk.CTkEntry(self, placeholder_text="https://www.google.cz/")
+        web_entry.grid(row=1, column=2, padx=20, pady=20)
+
+        add_button = ctk.CTkButton(self, text="Done")
+        add_button.grid(row=2, column=2, padx=20, pady=20)
 
 
 class RemoveWindow(ctk.CTkToplevel):
