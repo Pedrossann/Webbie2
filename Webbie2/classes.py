@@ -4,6 +4,7 @@ import webbrowser as web
 import csv
 
 
+# add window opens new TopLevel window in which we can create new web opening button(WebButton)
 class AddWindow(ctk.CTkToplevel):
     def __init__(self):
         super().__init__()
@@ -30,6 +31,7 @@ class AddWindow(ctk.CTkToplevel):
         add_button.grid(row=2, column=2, padx=20, pady=20)
 
 
+# this Button switches between MainFrames
 class FrameButton(ctk.CTkButton):
     def __init__(self, master, **kwargs):
         super().__init__(
@@ -48,11 +50,13 @@ class FrameButton(ctk.CTkButton):
         self.master = master
         self.name = kwargs["text"]
 
+    # switches the frame
     def frame_change(self):
         self.master.change_frame(self.name)
 
 
-class Main_Frame(ctk.CTkScrollableFrame):
+# MainFrame contains all the web opening buttons (WebButton). All of those frames are created at the start of the app and then thez switch bz fressing FrameButtons
+class MainFrame(ctk.CTkScrollableFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, width=900, height=900)
 
@@ -87,7 +91,7 @@ class Main_Frame(ctk.CTkScrollableFrame):
                 row += 1
 
 
-# this button opens saved web links
+# This button opens saved web links
 class WebButton(ctk.CTkButton):
     def __init__(self, **kwargs):
         super().__init__(
@@ -107,5 +111,6 @@ class WebButton(ctk.CTkButton):
         )
         self.weblink = kwargs["line"]["web"]
 
+    # this function opens saved weblink
     def open_web(self):
         web.open(self.weblink)

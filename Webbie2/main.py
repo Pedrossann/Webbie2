@@ -4,9 +4,8 @@ from PIL import Image
 import os
 import classes
 
+
 # Main App ______________________________________________________________________
-
-
 class MainWindow(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -33,7 +32,7 @@ class MainWindow(ctk.CTk):
                     master=self, text=file.rstrip(".csv"), row=len(self.list_of_files)
                 )
             )
-            self.list_of_frames.append(classes.Main_Frame(master=self, file=file))
+            self.list_of_frames.append(classes.MainFrame(master=self, file=file))
         self.list_of_widgets.append({"Frame_buttons": self.list_of_files})
 
         self.last_settings()
@@ -101,12 +100,12 @@ class MainWindow(ctk.CTk):
         add_window.grab_set()
 
     # saves changes to csv file
-
     def save(self):
         with open("last_opened.csv", "w") as file:
             line = csv.writer(file, lineterminator="")
             line.writerow([ctk.get_appearance_mode(), self.opened_frame.rstrip(".csv")])
 
+    # switches between frames
     def change_frame(self, open):
         for frame in self.list_of_frames:
             if frame.name.rstrip(".csv") == open:
