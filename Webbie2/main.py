@@ -12,29 +12,36 @@ class MainWindow(ctk.CTk):
         super().__init__()
         self.geometry("1300x800+100+100")
         self.title("Webbie2")
-        bg_image = ctk.CTkImage(
-            Image.open("Webbie2/BuildedImages/background.png"), size=(1920, 1080)
-        )
-        background = ctk.CTkLabel(master=self, image=bg_image, text="")
-        background.place(relx=0.5, x=-(self.winfo_screenwidth() / 2))
 
         self.list_of_files = []
         self.list_of_frames = []
+        self.list_of_widgets = []
+
+        bg_image = ctk.CTkImage(
+            Image.open("Webbie2/BuildedImages/background.png"), size=(1920, 1080)
+        )
+
+        background = ctk.CTkLabel(master=self, image=bg_image, text="")
+        background.place(relx=0.5, x=-(self.winfo_screenwidth() / 2))
+        self.list_of_widgets.append({"Main_frame_bg": background})
+
         files = os.listdir(os.getcwd() + "\Webbie2\Saves")
 
         for file in files:
             self.list_of_files.append(
-                classes.FileButton(
+                classes.FrameButton(
                     master=self, text=file.rstrip(".csv"), row=len(self.list_of_files)
                 )
             )
             self.list_of_frames.append(classes.Main_Frame(master=self, file=file))
+        self.list_of_widgets.append({"Frame_buttons": self.list_of_files})
 
         self.last_settings()
 
         # top menu box ________________________________________________________
         frame_menu_box = ctk.CTkFrame(master=self, height=40, width=500)
         frame_menu_box.place(x=15, y=5)
+        self.list_of_widgets.append({"Menu_box_frame": frame_menu_box})
 
         self.add_button = ctk.CTkButton(
             master=frame_menu_box,

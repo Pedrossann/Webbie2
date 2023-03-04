@@ -30,7 +30,7 @@ class AddWindow(ctk.CTkToplevel):
         add_button.grid(row=2, column=2, padx=20, pady=20)
 
 
-class FileButton(ctk.CTkButton):
+class FrameButton(ctk.CTkButton):
     def __init__(self, master, **kwargs):
         super().__init__(
             master=master,
