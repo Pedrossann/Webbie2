@@ -30,93 +30,82 @@ class AddWindow(ctk.CTkToplevel):
         add_button.grid(row=2, column=2, padx=20, pady=20)
 
 
-class OpenButton(ctk.CTkButton):
+class FileButton(ctk.CTkButton):
     def __init__(self, master, **kwargs):
         super().__init__(
             master=master,
-            text=kwargs["fname"],
+            text=kwargs["text"],
             fg_color=("#ACD400", "#FE8A00"),
             hover_color=("#BAE500", "#FE6C00"),
             border_color=("#ACD400", "#FE8A00"),
             border_width=5,
             text_color="black",
-            command=lambda self=self: self.reset_frame(master),
+            command=self.frame_change,
         )
 
         self.place(relx=0.5, x=-620, y=100 + kwargs["row"] * 60)
+
         self.master = master
-        self.file_name = kwargs["fname"]
+        self.name = kwargs["text"]
 
-        self.frame = Main_Frame(master=self.master, file_name=self.file_name)
-
-        if self.file_name.rstrip(".csv") == kwargs["opened_frame"]:
-            self.reset_frame(master)
-
-    # returns command for reseting frame to main window
-    def reset_frame(self, master):
-        master.change_frame(exc=self.frame)
-
-    # switches frame of buttons if its not an exception (exc = button that was pressed -> it will pack)
-    def change_bframe(self, exc):
-        if exc == self.frame:
-            self.frame.f_pack()
-        else:
-            self.frame.self_forget()
+    def frame_change(self):
+        self.master.change_frame(self.name)
 
 
-# zbavit se tohohle
-class Click_Button(ctk.CTkButton):
-    def __init__(self, master, line, **kwargs):
+class Main_Frame(ctk.CTkScrollableFrame):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, width=900, height=900)
+
+        self.name = kwargs["file"]
+        self.list_of_buttons = []
+
+        self.create_buttons()
+        self.grid_buttons()
+
+    def self_forget(self):
+        self.pack_forget()
+
+    # creates all the buttons from the file
+    def create_buttons(self):
+
+        with open(f"Saves/{self.name}") as file:
+
+            lines = csv.DictReader(file)
+
+            for line in lines:
+                self.list_of_buttons.append(WebButton(master=self, line=line))
+
+    # places all created buttons on the frame
+    def grid_buttons(self):
+        row, column = 0, 0
+        for button in self.list_of_buttons:
+
+            button.grid(row=row, column=column, pady=5, padx=2)
+            column += 1
+            if column == 6:
+                column = 0
+                row += 1
+
+
+# this button opens saved web links
+class WebButton(ctk.CTkButton):
+    def __init__(self, **kwargs):
         super().__init__(
-            master=master,
-            image=ctk.CTkImage(Image.open(f"Images/{line['image']}"), size=(160, 250)),
+            master=kwargs["master"],
+            image=ctk.CTkImage(
+                Image.open(f"Images/{kwargs['line']['image']}"), size=(160, 250)
+            ),
             compound="top",
-            text=line["name"],
+            text=kwargs["line"]["name"],
             fg_color=("#CEFE00", "#FE8A00"),
             hover_color=("#BAE500", "#FE6C00"),
             border_color=("#ACD400", "#FE8A00"),
             border_width=5,
             text_color="black",
-            font=kwargs["font"],
-            command=lambda self=self: web.open(line["web"]),
+            font=ctk.CTkFont(size=15, weight="bold"),
+            command=self.open_web,
         )
+        self.weblink = kwargs["line"]["web"]
 
-        self.grid(row=kwargs["row"], column=kwargs["column"], pady=5, padx=2)
-
-
-class Main_Frame(ctk.CTkScrollableFrame):
-    def __init__(self, master, **kwargs):
-        super().__init__(master)
-        self.configure(width=900, height=900)
-
-        self.f_pack()
-        self.file_n = kwargs["file_name"]
-
-        self.load_buttons()
-
-    # forgets pack
-    def self_forget(self):
-        self.pack_forget()
-
-    # pack
-    def f_pack(self):
-        self.pack(pady=50)
-
-    # loads all buttons on the frame
-    def load_buttons(self):
-        _row, _column = 0, 0
-        button_font = ctk.CTkFont(size=15, weight="bold")
-
-        with open(f"Saves/{self.file_n}") as file:
-
-            lines = csv.DictReader(file)
-
-            for line in lines:
-                button = Click_Button(
-                    master=self, line=line, font=button_font, row=_row, column=_column
-                )
-                print(line)
-                _column += 1
-                if _column == 5:
-                    _column = 0
-                    _row += 1
+    def open_web(self):
+        web.open(self.weblink)

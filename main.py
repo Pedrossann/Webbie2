@@ -4,36 +4,33 @@ from PIL import Image
 import os
 import classes
 
+# Main App ______________________________________________________________________
+
 
 class MainWindow(ctk.CTk):
     def __init__(self):
-
-        self.created_widgets = []
-        self.add_window = None  # change / probably not optimal solution
-
         super().__init__()
-        self.last_settings()
         self.geometry("1300x800+100+100")
         self.title("Webbie2")
-
-        self.openbutton = []
-        files_list = os.listdir(os.getcwd() + "\Saves")
         bg_image = ctk.CTkImage(
             Image.open("BuildedImages/background.png"), size=(1920, 1080)
         )
-
         background = ctk.CTkLabel(master=self, image=bg_image, text="")
         background.place(relx=0.5, x=-(self.winfo_screenwidth() / 2))
 
-        for file in files_list:
-            self.openbutton.append(
-                classes.OpenButton(
-                    self,
-                    fname=file,
-                    row=len(self.openbutton),
-                    opened_frame=self.opened_frame,
+        self.list_of_files = []
+        self.list_of_frames = []
+        files = os.listdir(os.getcwd() + "\Saves")
+
+        for file in files:
+            self.list_of_files.append(
+                classes.FileButton(
+                    master=self, text=file.rstrip(".csv"), row=len(self.list_of_files)
                 )
             )
+            self.list_of_frames.append(classes.Main_Frame(master=self, file=file))
+
+        self.last_settings()
 
         # top menu box ________________________________________________________
         frame_menu_box = ctk.CTkFrame(master=self, height=40, width=500)
@@ -76,7 +73,10 @@ class MainWindow(ctk.CTk):
                     ctk.set_appearance_mode("Dark")
                 else:
                     ctk.set_appearance_mode("Light")
-                self.opened_frame = line[1]
+                for frame in self.list_of_frames:
+                    if frame.name.rstrip(".csv") == line[1]:
+                        frame.pack(pady=50)
+                        self.opened_frame = frame.name.rstrip(".csv")
 
     # changes app mode
     def mode_switch(self):
@@ -98,19 +98,20 @@ class MainWindow(ctk.CTk):
     def save(self):
         with open("last_opened.csv", "w") as file:
             line = csv.writer(file, lineterminator="")
-            line.writerow([ctk.get_appearance_mode(), self.opened.rstrip(".csv")])
-            print(self.opened.rstrip(".csv"))
+            line.writerow([ctk.get_appearance_mode(), self.opened_frame.rstrip(".csv")])
 
-    def change_frame(self, exc):
-        for button in self.openbutton:
-            button.change_bframe(exc)
-            self.opened = exc.file_n
+    def change_frame(self, open):
+        for frame in self.list_of_frames:
+            if frame.name.rstrip(".csv") == open:
+                frame.pack(pady=50)
+                self.opened_frame = frame.name.rstrip(".csv")
+            else:
+                frame.self_forget()
         self.save()
 
 
 def main():
     app = MainWindow()
-
     app.mainloop()
 
 
