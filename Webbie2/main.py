@@ -13,14 +13,14 @@ class MainWindow(ctk.CTk):
         self.geometry("1300x800+100+100")
         self.title("Webbie2")
         bg_image = ctk.CTkImage(
-            Image.open("BuildedImages/background.png"), size=(1920, 1080)
+            Image.open("Webbie2/BuildedImages/background.png"), size=(1920, 1080)
         )
         background = ctk.CTkLabel(master=self, image=bg_image, text="")
         background.place(relx=0.5, x=-(self.winfo_screenwidth() / 2))
 
         self.list_of_files = []
         self.list_of_frames = []
-        files = os.listdir(os.getcwd() + "\Saves")
+        files = os.listdir(os.getcwd() + "\Webbie2\Saves")
 
         for file in files:
             self.list_of_files.append(
@@ -66,7 +66,7 @@ class MainWindow(ctk.CTk):
 
     # check saved settings from last running and recreates last app setting
     def last_settings(self):
-        with open("last_opened.csv") as file:
+        with open("Webbie2/last_opened.csv") as file:
             lines = csv.reader(file)
             for line in lines:
                 if line[0] == "Dark":

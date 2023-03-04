@@ -68,7 +68,7 @@ class Main_Frame(ctk.CTkScrollableFrame):
     # creates all the buttons from the file
     def create_buttons(self):
 
-        with open(f"Saves/{self.name}") as file:
+        with open(f"Webbie2/Saves/{self.name}") as file:
 
             lines = csv.DictReader(file)
 
@@ -93,7 +93,7 @@ class WebButton(ctk.CTkButton):
         super().__init__(
             master=kwargs["master"],
             image=ctk.CTkImage(
-                Image.open(f"Images/{kwargs['line']['image']}"), size=(160, 250)
+                Image.open(f"Webbie2/Images/{kwargs['line']['image']}"), size=(160, 250)
             ),
             compound="top",
             text=kwargs["line"]["name"],
