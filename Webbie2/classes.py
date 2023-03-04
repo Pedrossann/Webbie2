@@ -12,10 +12,21 @@ class AddWindow(ctk.CTkToplevel):
         self.title("Add Webbie2")
         self.geometry("500x400+600+300")
 
-        image_button = ctk.CTkButton(self, width=160, height=250)
+        image_button = ctk.CTkButton(
+            master=self,
+            width=160,
+            height=250,
+            text="Click to choose",
+            fg_color=("#CEFE00", "#FE8A00"),
+            hover_color=("#BAE500", "#FE6C00"),
+            border_color=("#ACD400", "#FE8A00"),
+            border_width=5,
+            text_color="black",
+            font=ctk.CTkFont(size=15, weight="bold"),
+        )
         image_button.grid(row=0, column=0, rowspan=3, padx=20, pady=20)
 
-        name_label = ctk.CTkLabel(self, text="Add Window")
+        name_label = ctk.CTkLabel(self, text="Name")
         name_label.grid(row=0, column=1, padx=20, pady=20)
 
         name_entry = ctk.CTkEntry(self, placeholder_text="Webbie2", state="normal")
@@ -27,7 +38,16 @@ class AddWindow(ctk.CTkToplevel):
         web_entry = ctk.CTkEntry(self, placeholder_text="https://www.google.cz/")
         web_entry.grid(row=1, column=2, padx=20, pady=20)
 
-        add_button = ctk.CTkButton(self, text="Done")
+        add_button = ctk.CTkButton(
+            master=self,
+            text="Done",
+            fg_color=("#CEFE00", "#FE8A00"),
+            hover_color=("#BAE500", "#FE6C00"),
+            border_color=("#ACD400", "#FE8A00"),
+            border_width=5,
+            text_color="black",
+            font=ctk.CTkFont(size=15, weight="bold"),
+        )
         add_button.grid(row=2, column=2, padx=20, pady=20)
 
 
