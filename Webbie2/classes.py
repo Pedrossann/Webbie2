@@ -2,7 +2,7 @@ import customtkinter as ctk
 from PIL import Image
 import webbrowser as web
 import csv
-
+import os
 
 # add window opens new TopLevel window in which we can create new web opening button(WebButton)
 class AddWindow(ctk.CTkToplevel):
@@ -10,10 +10,11 @@ class AddWindow(ctk.CTkToplevel):
         super().__init__()
 
         self.title("Add Webbie2")
-        self.geometry("500x400+600+300")
+        self.geometry("600+300")
 
         self.choose_frame_create()
 
+    # create and places window in which we can choose if we want to add Button or file
     def choose_frame_create(self):
         self.addbutton_window_create()
         self.addfolder_window_create()
@@ -34,7 +35,7 @@ class AddWindow(ctk.CTkToplevel):
             font=ctk.CTkFont(size=15, weight="bold"),
             command=self.addbutton_place,
         )
-        button_frame.grid(row=0, column=0)
+        button_frame.grid(row=0, column=0, padx=20, pady=20)
 
         choose_folder_frame = ctk.CTkButton(
             self.choose_frame,
@@ -49,26 +50,50 @@ class AddWindow(ctk.CTkToplevel):
             font=ctk.CTkFont(size=15, weight="bold"),
             command=self.addfolder_window_place,
         )
-        choose_folder_frame.grid(row=0, column=1)
+        choose_folder_frame.grid(row=0, column=1, padx=20, pady=20)
 
+    # places frame in which we can add new button
     def addbutton_place(self):
         self.choose_frame.forget()
         self.button_frame.pack()
 
+    # places frame in which we can add new file
     def addfolder_window_place(self):
         self.choose_frame.forget()
         self.folder_frame.pack()
 
+    # creates frame in which we can add new folder
     def addfolder_window_create(self):
+
         self.folder_frame = ctk.CTkFrame(self)
 
+        add_folder_label = ctk.CTkLabel(self.folder_frame, text="Name of the folder")
+        add_folder_label.grid(row=0, column=0, padx=20, pady=20)
+
         add_folder_entry = ctk.CTkEntry(self.folder_frame)
-        add_folder_entry.pack()
+        add_folder_entry.grid(row=0, column=1, padx=20, pady=20)
 
-        add_folder_button = ctk.CTkButton(self.folder_frame, text="Done")
-        add_folder_button.pack()
+        add_folder_button = ctk.CTkButton(
+            self.folder_frame,
+            text="Done",
+            command=lambda self=self: self.saves_new_csvfile(add_folder_entry.get()),
+        )
+        add_folder_button.grid(row=1, column=1, padx=20, pady=20)
 
+    # creates new csv file
+    def saves_new_csvfile(self, name_of_file):
+        with open(f"Webbie2/Saves/{name_of_file}.csv", "w") as file:
+            line = csv.writer(file, lineterminator="")
+            line.writerow(["name", "web", "image"])
+        self.destroy()
+
+    # creates frame in which we can add new button
     def addbutton_window_create(self):
+
+        list_of_files = []
+        list_of_files_csv = os.listdir(os.getcwd() + "\Webbie2\Saves")
+        for list in list_of_files_csv:
+            list_of_files.append(list.rstrip(".csv"))
 
         self.button_frame = ctk.CTkFrame(self)
 
@@ -85,23 +110,29 @@ class AddWindow(ctk.CTkToplevel):
             font=ctk.CTkFont(size=15, weight="bold"),
         )
 
-        image_button.grid(row=0, column=0, rowspan=3, padx=20, pady=20)
+        image_button.grid(row=0, column=0, rowspan=4, padx=20, pady=20)
+
+        folder_label = ctk.CTkLabel(self.button_frame, text="Folder")
+        folder_label.grid(row=0, column=1, padx=20, pady=20)
+
+        folder_combobox = ctk.CTkComboBox(self.button_frame, values=list_of_files)
+        folder_combobox.grid(row=0, column=2, padx=20, pady=20)
 
         name_label = ctk.CTkLabel(self.button_frame, text="Name")
-        name_label.grid(row=0, column=1, padx=20, pady=20)
+        name_label.grid(row=1, column=1, padx=20, pady=20)
 
         name_entry = ctk.CTkEntry(
             self.button_frame, placeholder_text="Webbie2", state="normal"
         )
-        name_entry.grid(row=0, column=2, padx=20, pady=20)
+        name_entry.grid(row=1, column=2, padx=20, pady=20)
 
         web_label = ctk.CTkLabel(self.button_frame, text="Web link")
-        web_label.grid(row=1, column=1, padx=20, pady=20)
+        web_label.grid(row=2, column=1, padx=20, pady=20)
 
         web_entry = ctk.CTkEntry(
             self.button_frame, placeholder_text="https://www.google.cz/"
         )
-        web_entry.grid(row=1, column=2, padx=20, pady=20)
+        web_entry.grid(row=2, column=2, padx=20, pady=20)
 
         add_button = ctk.CTkButton(
             master=self.button_frame,
@@ -113,7 +144,7 @@ class AddWindow(ctk.CTkToplevel):
             text_color="black",
             font=ctk.CTkFont(size=15, weight="bold"),
         )
-        add_button.grid(row=2, column=2, padx=20, pady=20)
+        add_button.grid(row=3, column=2, padx=20, pady=20)
 
 
 # this Button switches between MainFrames
