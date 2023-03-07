@@ -6,8 +6,9 @@ import os
 
 # add window opens new TopLevel window in which we can create new web opening button(WebButton)
 class AddWindow(ctk.CTkToplevel):
-    def __init__(self):
+    def __init__(self, master):
         super().__init__()
+        self.master = master
 
         self.title("Add Webbie2")
         self.geometry("600+300")
@@ -83,6 +84,7 @@ class AddWindow(ctk.CTkToplevel):
             line = csv.writer(file, lineterminator="")
             line.writerow(["name", "web", "image"])
         self.destroy()
+        self.master.reset_main_frame()
 
     # ____________________________________add button_______________________________________#
 
@@ -155,6 +157,7 @@ class AddWindow(ctk.CTkToplevel):
         with open(f"Webbie2/Saves/{self.folder_combobox.get()}.csv", "a") as file:
             file.write(f"\n{self.name_entry.get()},{self.web_entry.get()},Python.png")
         self.destroy()
+        self.master.reset_main_frame()
 
 
 # this Button switches between MainFrames
@@ -179,6 +182,7 @@ class FrameButton(ctk.CTkButton):
     # switches the frame
     def frame_change(self):
         self.master.change_frame(self.name)
+        print("change", self.name)
 
 
 # MainFrame contains all the web opening buttons (WebButton). All of those frames are created at the start of the app and then thez switch bz fressing FrameButtons
@@ -191,6 +195,7 @@ class MainFrame(ctk.CTkScrollableFrame):
 
         self.create_buttons()
         self.grid_buttons()
+        print("init", self.name)
 
     def self_forget(self):
         self.pack_forget()
@@ -236,6 +241,7 @@ class WebButton(ctk.CTkButton):
             command=self.open_web,
         )
         self.weblink = kwargs["line"]["web"]
+        print("button")
 
     # this function opens saved weblink
     def open_web(self):

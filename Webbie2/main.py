@@ -23,6 +23,24 @@ class MainWindow(ctk.CTk):
         background = ctk.CTkLabel(master=self, image=bg_image, text="")
         background.place(relx=0.5, x=-(self.winfo_screenwidth() / 2))
         self.list_of_widgets.append({"Main_frame_bg": background})
+        self.create_main_frame()
+        self.create_menubox()
+
+    # reset main frame
+    def reset_main_frame(self):
+        print("reset")
+
+        self.list_of_files = []
+
+        for frame in self.list_of_frames:
+            frame.self_forget()
+
+        self.list_of_frames = []
+
+        self.create_main_frame()
+
+    # create main frame
+    def create_main_frame(self):
 
         files = os.listdir(os.getcwd() + "\Webbie2\Saves")
 
@@ -38,6 +56,8 @@ class MainWindow(ctk.CTk):
         self.last_settings()
 
         # top menu box ________________________________________________________
+
+    def create_menubox(self):
         frame_menu_box = ctk.CTkFrame(master=self, height=40, width=500)
         frame_menu_box.place(x=15, y=5)
         self.list_of_widgets.append({"Menu_box_frame": frame_menu_box})
@@ -82,6 +102,7 @@ class MainWindow(ctk.CTk):
                 for frame in self.list_of_frames:
                     if frame.name.rstrip(".csv") == line[1]:
                         frame.pack(pady=50)
+                        print("pack", frame)
                         self.opened_frame = frame.name.rstrip(".csv")
 
     # changes app mode
@@ -96,7 +117,7 @@ class MainWindow(ctk.CTk):
     # creates new window crom classes file
     def open_add_window(self):
 
-        add_window = classes.AddWindow()
+        add_window = classes.AddWindow(self)
         add_window.grab_set()
 
     # saves changes to csv file
