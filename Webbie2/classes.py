@@ -14,6 +14,7 @@ class AddWindow(ctk.CTkToplevel):
 
         self.choose_frame_create()
 
+    # ____________________________________choose frame_______________________________________#
     # create and places window in which we can choose if we want to add Button or file
     def choose_frame_create(self):
         self.addbutton_window_create()
@@ -52,16 +53,7 @@ class AddWindow(ctk.CTkToplevel):
         )
         choose_folder_frame.grid(row=0, column=1, padx=20, pady=20)
 
-    # places frame in which we can add new button
-    def addbutton_place(self):
-        self.choose_frame.forget()
-        self.button_frame.pack()
-
-    # places frame in which we can add new file
-    def addfolder_window_place(self):
-        self.choose_frame.forget()
-        self.folder_frame.pack()
-
+    # ____________________________________add folder_______________________________________#
     # creates frame in which we can add new folder
     def addfolder_window_create(self):
 
@@ -80,12 +72,19 @@ class AddWindow(ctk.CTkToplevel):
         )
         add_folder_button.grid(row=1, column=1, padx=20, pady=20)
 
+    # places frame in which we can add new file
+    def addfolder_window_place(self):
+        self.choose_frame.forget()
+        self.folder_frame.pack()
+
     # creates new csv file
     def saves_new_csvfile(self, name_of_file):
         with open(f"Webbie2/Saves/{name_of_file}.csv", "w") as file:
             line = csv.writer(file, lineterminator="")
             line.writerow(["name", "web", "image"])
         self.destroy()
+
+    # ____________________________________add button_______________________________________#
 
     # creates frame in which we can add new button
     def addbutton_window_create(self):
@@ -115,24 +114,24 @@ class AddWindow(ctk.CTkToplevel):
         folder_label = ctk.CTkLabel(self.button_frame, text="Folder")
         folder_label.grid(row=0, column=1, padx=20, pady=20)
 
-        folder_combobox = ctk.CTkComboBox(self.button_frame, values=list_of_files)
-        folder_combobox.grid(row=0, column=2, padx=20, pady=20)
+        self.folder_combobox = ctk.CTkComboBox(self.button_frame, values=list_of_files)
+        self.folder_combobox.grid(row=0, column=2, padx=20, pady=20)
 
         name_label = ctk.CTkLabel(self.button_frame, text="Name")
         name_label.grid(row=1, column=1, padx=20, pady=20)
 
-        name_entry = ctk.CTkEntry(
+        self.name_entry = ctk.CTkEntry(
             self.button_frame, placeholder_text="Webbie2", state="normal"
         )
-        name_entry.grid(row=1, column=2, padx=20, pady=20)
+        self.name_entry.grid(row=1, column=2, padx=20, pady=20)
 
         web_label = ctk.CTkLabel(self.button_frame, text="Web link")
         web_label.grid(row=2, column=1, padx=20, pady=20)
 
-        web_entry = ctk.CTkEntry(
+        self.web_entry = ctk.CTkEntry(
             self.button_frame, placeholder_text="https://www.google.cz/"
         )
-        web_entry.grid(row=2, column=2, padx=20, pady=20)
+        self.web_entry.grid(row=2, column=2, padx=20, pady=20)
 
         add_button = ctk.CTkButton(
             master=self.button_frame,
@@ -143,8 +142,19 @@ class AddWindow(ctk.CTkToplevel):
             border_width=5,
             text_color="black",
             font=ctk.CTkFont(size=15, weight="bold"),
+            command=self.create_button,
         )
         add_button.grid(row=3, column=2, padx=20, pady=20)
+
+    # places frame in which we can add new button
+    def addbutton_place(self):
+        self.choose_frame.forget()
+        self.button_frame.pack()
+
+    def create_button(self):
+        with open(f"Webbie2/Saves/{self.folder_combobox.get()}.csv", "a") as file:
+            file.write(f"\n{self.name_entry.get()},{self.web_entry.get()},Python.png")
+        self.destroy()
 
 
 # this Button switches between MainFrames
