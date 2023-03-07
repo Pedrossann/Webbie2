@@ -101,7 +101,7 @@ class MainWindow(ctk.CTk):
 
     # saves changes to csv file
     def save(self):
-        with open("last_opened.csv", "w") as file:
+        with open("Webbie2/last_opened.csv", "w") as file:
             line = csv.writer(file, lineterminator="")
             line.writerow([ctk.get_appearance_mode(), self.opened_frame.rstrip(".csv")])
 
