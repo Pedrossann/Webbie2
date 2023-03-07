@@ -15,6 +15,7 @@ class MainWindow(ctk.CTk):
         self.list_of_files = []
         self.list_of_frames = []
         self.list_of_widgets = []
+        self.button_remove = False
 
         bg_image = ctk.CTkImage(
             Image.open("Webbie2/BuildedImages/background.png"), size=(1920, 1080)
@@ -28,7 +29,6 @@ class MainWindow(ctk.CTk):
 
     # reset main frame
     def reset_main_frame(self):
-        print("reset")
 
         self.list_of_files = []
 
@@ -80,6 +80,9 @@ class MainWindow(ctk.CTk):
             fg_color=("#ACD400", "#FE8A00"),
             hover_color=("#BAE500", "#FE6C00"),
             text_color="black",
+            border_width=5,
+            border_color=("#ACD400", "#FE8A00"),
+            command=self.click_remove_button,
         )
         self.remove_button.place(x=180, y=5)
 
@@ -89,6 +92,15 @@ class MainWindow(ctk.CTk):
         switch_mode_button.place(
             x=15, y=5,
         )
+
+    def click_remove_button(self):
+        if self.button_remove == False:
+            self.remove_button.configure(border_color="red")
+            self.button_remove = True
+
+        else:
+            self.remove_button.configure(border_color=("#ACD400", "#FE8A00"))
+            self.button_remove = False
 
     # check saved settings from last running and recreates last app setting
     def last_settings(self):
@@ -102,7 +114,6 @@ class MainWindow(ctk.CTk):
                 for frame in self.list_of_frames:
                     if frame.name.rstrip(".csv") == line[1]:
                         frame.pack(pady=50)
-                        print("pack", frame)
                         self.opened_frame = frame.name.rstrip(".csv")
 
     # changes app mode

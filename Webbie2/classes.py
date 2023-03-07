@@ -182,7 +182,6 @@ class FrameButton(ctk.CTkButton):
     # switches the frame
     def frame_change(self):
         self.master.change_frame(self.name)
-        print("change", self.name)
 
 
 # MainFrame contains all the web opening buttons (WebButton). All of those frames are created at the start of the app and then thez switch bz fressing FrameButtons
@@ -190,12 +189,12 @@ class MainFrame(ctk.CTkScrollableFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, width=900, height=900)
 
+        self.master = master
         self.name = kwargs["file"]
         self.list_of_buttons = []
 
         self.create_buttons()
         self.grid_buttons()
-        print("init", self.name)
 
     def self_forget(self):
         self.pack_forget()
@@ -208,7 +207,9 @@ class MainFrame(ctk.CTkScrollableFrame):
             lines = csv.DictReader(file)
 
             for line in lines:
-                self.list_of_buttons.append(WebButton(master=self, line=line))
+                self.list_of_buttons.append(
+                    WebButton(master=self, line=line, RB_master=self.master)
+                )
 
     # places all created buttons on the frame
     def grid_buttons(self):
@@ -224,7 +225,7 @@ class MainFrame(ctk.CTkScrollableFrame):
 
 # This button opens saved web links
 class WebButton(ctk.CTkButton):
-    def __init__(self, **kwargs):
+    def __init__(self, RB_master, **kwargs):
         super().__init__(
             master=kwargs["master"],
             image=ctk.CTkImage(
@@ -240,9 +241,35 @@ class WebButton(ctk.CTkButton):
             font=ctk.CTkFont(size=15, weight="bold"),
             command=self.open_web,
         )
+        self.master = kwargs["master"]
+        self.text = kwargs["line"]["name"]
         self.weblink = kwargs["line"]["web"]
-        print("button")
+        self.image = kwargs["line"]["image"]
+
+        self.main_window = RB_master
 
     # this function opens saved weblink
     def open_web(self):
-        web.open(self.weblink)
+        if self.main_window.button_remove == False:
+            web.open(self.weblink)
+
+        else:
+            good_buttons = []
+            with open(f"Webbie2/Saves/{self.master.name}") as file:
+                lines = csv.DictReader(file)
+                for line in lines:
+                    if line["name"] != self.text:
+                        if line["web"] != self.weblink:
+                            if line["image"] != self.image:
+                                good_buttons.append(
+                                    [line["name"], line["web"], line["image"]]
+                                )
+
+            with open(f"Webbie2/Saves/{self.master.name}", "w") as file:
+                wline = csv.writer(file, lineterminator="")
+                wline.writerow(["name", "web", "image"])
+                for button in good_buttons:
+                    wline.writerow(button)
+
+                self.main_window.reset_main_frame()
+
