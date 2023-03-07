@@ -12,8 +12,68 @@ class AddWindow(ctk.CTkToplevel):
         self.title("Add Webbie2")
         self.geometry("500x400+600+300")
 
+        self.choose_frame_create()
+
+    def choose_frame_create(self):
+        self.addbutton_window_create()
+        self.addfolder_window_create()
+
+        self.choose_frame = ctk.CTkFrame(self)
+        self.choose_frame.pack()
+
+        button_frame = ctk.CTkButton(
+            self.choose_frame,
+            text="Add Button",
+            width=160,
+            height=250,
+            fg_color=("#CEFE00", "#FE8A00"),
+            hover_color=("#BAE500", "#FE6C00"),
+            border_color=("#ACD400", "#FE8A00"),
+            border_width=5,
+            text_color="black",
+            font=ctk.CTkFont(size=15, weight="bold"),
+            command=self.addbutton_place,
+        )
+        button_frame.grid(row=0, column=0)
+
+        choose_folder_frame = ctk.CTkButton(
+            self.choose_frame,
+            text="Add Folder",
+            width=160,
+            height=250,
+            fg_color=("#CEFE00", "#FE8A00"),
+            hover_color=("#BAE500", "#FE6C00"),
+            border_color=("#ACD400", "#FE8A00"),
+            border_width=5,
+            text_color="black",
+            font=ctk.CTkFont(size=15, weight="bold"),
+            command=self.addfolder_window_place,
+        )
+        choose_folder_frame.grid(row=0, column=1)
+
+    def addbutton_place(self):
+        self.choose_frame.forget()
+        self.button_frame.pack()
+
+    def addfolder_window_place(self):
+        self.choose_frame.forget()
+        self.folder_frame.pack()
+
+    def addfolder_window_create(self):
+        self.folder_frame = ctk.CTkFrame(self)
+
+        add_folder_entry = ctk.CTkEntry(self.folder_frame)
+        add_folder_entry.pack()
+
+        add_folder_button = ctk.CTkButton(self.folder_frame, text="Done")
+        add_folder_button.pack()
+
+    def addbutton_window_create(self):
+
+        self.button_frame = ctk.CTkFrame(self)
+
         image_button = ctk.CTkButton(
-            master=self,
+            master=self.button_frame,
             width=160,
             height=250,
             text="Click to choose",
@@ -24,22 +84,27 @@ class AddWindow(ctk.CTkToplevel):
             text_color="black",
             font=ctk.CTkFont(size=15, weight="bold"),
         )
+
         image_button.grid(row=0, column=0, rowspan=3, padx=20, pady=20)
 
-        name_label = ctk.CTkLabel(self, text="Name")
+        name_label = ctk.CTkLabel(self.button_frame, text="Name")
         name_label.grid(row=0, column=1, padx=20, pady=20)
 
-        name_entry = ctk.CTkEntry(self, placeholder_text="Webbie2", state="normal")
+        name_entry = ctk.CTkEntry(
+            self.button_frame, placeholder_text="Webbie2", state="normal"
+        )
         name_entry.grid(row=0, column=2, padx=20, pady=20)
 
-        web_label = ctk.CTkLabel(self, text="Web link")
+        web_label = ctk.CTkLabel(self.button_frame, text="Web link")
         web_label.grid(row=1, column=1, padx=20, pady=20)
 
-        web_entry = ctk.CTkEntry(self, placeholder_text="https://www.google.cz/")
+        web_entry = ctk.CTkEntry(
+            self.button_frame, placeholder_text="https://www.google.cz/"
+        )
         web_entry.grid(row=1, column=2, padx=20, pady=20)
 
         add_button = ctk.CTkButton(
-            master=self,
+            master=self.button_frame,
             text="Done",
             fg_color=("#CEFE00", "#FE8A00"),
             hover_color=("#BAE500", "#FE6C00"),
