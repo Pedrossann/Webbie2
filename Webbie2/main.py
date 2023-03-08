@@ -45,9 +45,12 @@ class MainWindow(ctk.CTk):
         files = os.listdir(os.getcwd() + "\Webbie2\Saves")
 
         for file in files:
+
             self.list_of_files.append(
                 classes.FrameButton(
-                    master=self, text=file.rstrip(".csv"), row=len(self.list_of_files)
+                    master=self,
+                    text=os.path.splitext(file)[0],
+                    row=len(self.list_of_files),
                 )
             )
             self.list_of_frames.append(classes.MainFrame(master=self, file=file))

@@ -63,13 +63,13 @@ class AddWindow(ctk.CTkToplevel):
         add_folder_label = ctk.CTkLabel(self.folder_frame, text="Name of the folder")
         add_folder_label.grid(row=0, column=0, padx=20, pady=20)
 
-        add_folder_entry = ctk.CTkEntry(self.folder_frame)
-        add_folder_entry.grid(row=0, column=1, padx=20, pady=20)
+        self.add_folder_entry = ctk.CTkEntry(self.folder_frame)
+        self.add_folder_entry.grid(row=0, column=1, padx=20, pady=20)
 
         add_folder_button = ctk.CTkButton(
             self.folder_frame,
             text="Done",
-            command=lambda self=self: self.saves_new_csvfile(add_folder_entry.get()),
+            command=lambda self=self: self.saves_new_csvfile(),
         )
         add_folder_button.grid(row=1, column=1, padx=20, pady=20)
 
@@ -79,8 +79,8 @@ class AddWindow(ctk.CTkToplevel):
         self.folder_frame.pack()
 
     # creates new csv file
-    def saves_new_csvfile(self, name_of_file):
-        with open(f"Webbie2/Saves/{name_of_file}.csv", "w") as file:
+    def saves_new_csvfile(self):
+        with open(f"Webbie2/Saves/{self.add_folder_entry.get()}.csv", "w") as file:
             line = csv.writer(file, lineterminator="")
             line.writerow(["name", "web", "image"])
         self.destroy()
@@ -178,6 +178,7 @@ class FrameButton(ctk.CTkButton):
 
         self.master = master
         self.name = kwargs["text"]
+        print(kwargs["text"])
 
     # switches the frame
     def frame_change(self):
