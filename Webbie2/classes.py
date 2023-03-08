@@ -94,7 +94,7 @@ class AddWindow(ctk.CTkToplevel):
         list_of_files = []
         list_of_files_csv = os.listdir(os.getcwd() + "\Webbie2\Saves")
         for list in list_of_files_csv:
-            list_of_files.append(list.rstrip(".csv"))
+            list_of_files.append(os.path.splitext(list)[0])
 
         self.button_frame = ctk.CTkFrame(self)
 
@@ -260,17 +260,13 @@ class WebButton(ctk.CTkButton):
                 lines = csv.DictReader(file)
                 for line in lines:
                     if line["name"] != self.text:
-                        if line["web"] != self.weblink:
-                            if line["image"] != self.image:
-                                good_buttons.append(
-                                    [line["name"], line["web"], line["image"]]
-                                )
+                        good_buttons.append([line["name"], line["web"], line["image"]])
 
             with open(f"Webbie2/Saves/{self.master.name}", "w") as file:
-                wline = csv.writer(file, lineterminator="")
+                wline = csv.writer(file, lineterminator="\n")
                 wline.writerow(["name", "web", "image"])
                 for button in good_buttons:
                     wline.writerow(button)
 
-                self.main_window.reset_main_frame()
+            self.main_window.reset_main_frame()
 

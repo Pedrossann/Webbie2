@@ -115,9 +115,9 @@ class MainWindow(ctk.CTk):
                 else:
                     ctk.set_appearance_mode("Light")
                 for frame in self.list_of_frames:
-                    if frame.name.rstrip(".csv") == line[1]:
+                    if os.path.splitext(frame.name)[0] == line[1]:
                         frame.pack(pady=50)
-                        self.opened_frame = frame.name.rstrip(".csv")
+                        self.opened_frame = os.path.splitext(frame.name)[0]
 
     # changes app mode
     def mode_switch(self):
@@ -138,14 +138,16 @@ class MainWindow(ctk.CTk):
     def save(self):
         with open("Webbie2/last_opened.csv", "w") as file:
             line = csv.writer(file, lineterminator="")
-            line.writerow([ctk.get_appearance_mode(), self.opened_frame.rstrip(".csv")])
+            line.writerow(
+                [ctk.get_appearance_mode(), os.path.splitext(self.opened_frame)[0]]
+            )
 
     # switches between frames
     def change_frame(self, open):
         for frame in self.list_of_frames:
-            if frame.name.rstrip(".csv") == open:
+            if os.path.splitext(frame.name)[0] == open:
                 frame.pack(pady=50)
-                self.opened_frame = frame.name.rstrip(".csv")
+                self.opened_frame = os.path.splitext(frame.name)[0]
             else:
                 frame.self_forget()
         self.save()
