@@ -93,8 +93,12 @@ class MainWindow(ctk.CTk):
         self.remove_button.place(x=180, y=5)
 
         switch_mode_button = ctk.CTkSwitch(
-            master=frame_menu_box, text="Mode", command=self.mode_switch
+            master=frame_menu_box,
+            text="Mode",
+            command=self.mode_switch,
+            fg_color=(self.light_fg_colour, self.dark_fg_colour),
         )
+
         switch_mode_button.place(
             x=15, y=5,
         )
