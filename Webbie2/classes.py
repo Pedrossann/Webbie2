@@ -237,7 +237,7 @@ class MainFrame(ctk.CTkScrollableFrame):
 
             button.grid(row=row, column=column, pady=5, padx=2)
             column += 1
-            if column == 6:
+            if column == 5:
                 column = 0
                 row += 1
 
