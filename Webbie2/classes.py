@@ -29,9 +29,12 @@ class AddWindow(ctk.CTkToplevel):
             text="Add Button",
             width=160,
             height=250,
-            fg_color=("#CEFE00", "#FE8A00"),
-            hover_color=("#BAE500", "#FE6C00"),
-            border_color=("#ACD400", "#FE8A00"),
+            fg_color=(self.master.light_fg_colour, self.master.dark_fg_colour),
+            hover_color=(
+                self.master.light_hoover_colour,
+                self.master.dark_hoover_colour,
+            ),
+            border_color=(self.master.light_fg_colour, self.master.dark_fg_colour),
             border_width=5,
             text_color="black",
             font=ctk.CTkFont(size=15, weight="bold"),
@@ -44,9 +47,12 @@ class AddWindow(ctk.CTkToplevel):
             text="Add Folder",
             width=160,
             height=250,
-            fg_color=("#CEFE00", "#FE8A00"),
-            hover_color=("#BAE500", "#FE6C00"),
-            border_color=("#ACD400", "#FE8A00"),
+            fg_color=(self.master.light_fg_colour, self.master.dark_fg_colour),
+            hover_color=(
+                self.master.light_hoover_colour,
+                self.master.dark_hoover_colour,
+            ),
+            border_color=(self.master.light_fg_colour, self.master.dark_fg_colour),
             border_width=5,
             text_color="black",
             font=ctk.CTkFont(size=15, weight="bold"),
@@ -69,6 +75,13 @@ class AddWindow(ctk.CTkToplevel):
         add_folder_button = ctk.CTkButton(
             self.folder_frame,
             text="Done",
+            fg_color=(self.master.light_fg_colour, self.master.dark_fg_colour),
+            border_color=(self.master.light_fg_colour, self.master.dark_fg_colour),
+            hover_color=(
+                self.master.light_hoover_colour,
+                self.master.dark_hoover_colour,
+            ),
+            border_width=5,
             command=lambda self=self: self.saves_new_csvfile(),
         )
         add_folder_button.grid(row=1, column=1, padx=20, pady=20)
@@ -103,9 +116,12 @@ class AddWindow(ctk.CTkToplevel):
             width=160,
             height=250,
             text="Click to choose",
-            fg_color=("#CEFE00", "#FE8A00"),
-            hover_color=("#BAE500", "#FE6C00"),
-            border_color=("#ACD400", "#FE8A00"),
+            fg_color=(self.master.light_fg_colour, self.master.dark_fg_colour),
+            hover_color=(
+                self.master.light_hoover_colour,
+                self.master.dark_hoover_colour,
+            ),
+            border_color=(self.master.light_fg_colour, self.master.dark_fg_colour),
             border_width=5,
             text_color="black",
             font=ctk.CTkFont(size=15, weight="bold"),
@@ -138,9 +154,12 @@ class AddWindow(ctk.CTkToplevel):
         add_button = ctk.CTkButton(
             master=self.button_frame,
             text="Done",
-            fg_color=("#CEFE00", "#FE8A00"),
-            hover_color=("#BAE500", "#FE6C00"),
-            border_color=("#ACD400", "#FE8A00"),
+            fg_color=(self.master.light_fg_colour, self.master.dark_fg_colour),
+            hover_color=(
+                self.master.light_hoover_colour,
+                self.master.dark_hoover_colour,
+            ),
+            border_color=(self.master.light_fg_colour, self.master.dark_fg_colour),
             border_width=5,
             text_color="black",
             font=ctk.CTkFont(size=15, weight="bold"),
@@ -166,9 +185,9 @@ class FrameButton(ctk.CTkButton):
         super().__init__(
             master=master,
             text=kwargs["text"],
-            fg_color=("#ACD400", "#FE8A00"),
-            hover_color=("#BAE500", "#FE6C00"),
-            border_color=("#ACD400", "#FE8A00"),
+            fg_color=(master.light_fg_colour, master.dark_fg_colour),
+            hover_color=(master.light_hoover_colour, master.dark_hoover_colour),
+            border_color=(master.light_fg_colour, master.dark_fg_colour),
             border_width=5,
             text_color="black",
             command=self.frame_change,
@@ -178,7 +197,6 @@ class FrameButton(ctk.CTkButton):
 
         self.master = master
         self.name = kwargs["text"]
-        print(kwargs["text"])
 
     # switches the frame
     def frame_change(self):
@@ -227,6 +245,7 @@ class MainFrame(ctk.CTkScrollableFrame):
 # This button opens saved web links
 class WebButton(ctk.CTkButton):
     def __init__(self, RB_master, **kwargs):
+        self.main_window = RB_master
         super().__init__(
             master=kwargs["master"],
             image=ctk.CTkImage(
@@ -234,9 +253,18 @@ class WebButton(ctk.CTkButton):
             ),
             compound="top",
             text=kwargs["line"]["name"],
-            fg_color=("#CEFE00", "#FE8A00"),
-            hover_color=("#BAE500", "#FE6C00"),
-            border_color=("#ACD400", "#FE8A00"),
+            fg_color=(
+                self.main_window.light_fg_colour,
+                self.main_window.dark_fg_colour,
+            ),
+            hover_color=(
+                self.main_window.light_hoover_colour,
+                self.main_window.dark_hoover_colour,
+            ),
+            border_color=(
+                self.main_window.light_fg_colour,
+                self.main_window.dark_fg_colour,
+            ),
             border_width=5,
             text_color="black",
             font=ctk.CTkFont(size=15, weight="bold"),
@@ -246,8 +274,6 @@ class WebButton(ctk.CTkButton):
         self.text = kwargs["line"]["name"]
         self.weblink = kwargs["line"]["web"]
         self.image = kwargs["line"]["image"]
-
-        self.main_window = RB_master
 
     # this function opens saved weblink
     def open_web(self):

@@ -16,6 +16,7 @@ class MainWindow(ctk.CTk):
         self.list_of_frames = []
         self.list_of_widgets = []
         self.button_remove = False
+        self.set_colours()
 
         bg_image = ctk.CTkImage(
             Image.open("Webbie2/BuildedImages/background.png"), size=(1920, 1080)
@@ -69,8 +70,10 @@ class MainWindow(ctk.CTk):
             master=frame_menu_box,
             text="Add",
             width=20,
-            fg_color=("#ACD400", "#FE8A00"),
-            hover_color=("#BAE500", "#FE6C00"),
+            fg_color=(self.light_fg_colour, self.dark_fg_colour),
+            hover_color=(self.light_hoover_colour, self.dark_hoover_colour),
+            border_color=(self.light_fg_colour, self.dark_fg_colour),
+            border_width=5,
             text_color="black",
             command=self.open_add_window,
         )
@@ -80,11 +83,11 @@ class MainWindow(ctk.CTk):
             master=frame_menu_box,
             text="Remove",
             width=20,
-            fg_color=("#ACD400", "#FE8A00"),
-            hover_color=("#BAE500", "#FE6C00"),
+            fg_color=(self.light_fg_colour, self.dark_fg_colour),
+            hover_color=(self.light_hoover_colour, self.dark_hoover_colour),
             text_color="black",
             border_width=5,
-            border_color=("#ACD400", "#FE8A00"),
+            border_color=(self.light_fg_colour, self.dark_fg_colour),
             command=self.click_remove_button,
         )
         self.remove_button.place(x=180, y=5)
@@ -102,22 +105,41 @@ class MainWindow(ctk.CTk):
             self.button_remove = True
 
         else:
-            self.remove_button.configure(border_color=("#ACD400", "#FE8A00"))
+            self.remove_button.configure(
+                border_color=(self.light_bg_colour, self.dark_bg_colour)
+            )
             self.button_remove = False
 
     # check saved settings from last running and recreates last app setting
     def last_settings(self):
-        with open("Webbie2/last_opened.csv") as file:
+        with open("Webbie2/last_settings.csv") as file:
             lines = csv.reader(file)
             for line in lines:
+
+                # open last dark/light mode
                 if line[0] == "Dark":
                     ctk.set_appearance_mode("Dark")
                 else:
                     ctk.set_appearance_mode("Light")
+                # open last frame
                 for frame in self.list_of_frames:
                     if os.path.splitext(frame.name)[0] == line[1]:
                         frame.pack(pady=50)
                         self.opened_frame = os.path.splitext(frame.name)[0]
+
+    # set colours
+    def set_colours(self):
+        with open("Webbie2/last_settings.csv") as file:
+            lines = csv.reader(file)
+            for line in lines:
+
+                # setting colours
+                self.light_fg_colour = line[2]
+                self.light_bg_colour = line[3]
+                self.dark_fg_colour = line[4]
+                self.dark_bg_colour = line[5]
+                self.light_hoover_colour = line[6]
+                self.dark_hoover_colour = line[7]
 
     # changes app mode
     def mode_switch(self):
@@ -136,10 +158,19 @@ class MainWindow(ctk.CTk):
 
     # saves changes to csv file
     def save(self):
-        with open("Webbie2/last_opened.csv", "w") as file:
+        with open("Webbie2/last_settings.csv", "w") as file:
             line = csv.writer(file, lineterminator="")
             line.writerow(
-                [ctk.get_appearance_mode(), os.path.splitext(self.opened_frame)[0]]
+                [
+                    ctk.get_appearance_mode(),
+                    os.path.splitext(self.opened_frame)[0],
+                    self.light_fg_colour,
+                    self.light_bg_colour,
+                    self.dark_fg_colour,
+                    self.dark_bg_colour,
+                    self.light_hoover_colour,
+                    self.dark_hoover_colour,
+                ]
             )
 
     # switches between frames
